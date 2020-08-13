@@ -17,6 +17,7 @@ from .managers import CustomUserManager
 class Categorie(models.Model):
     name = models.CharField(max_length=250, unique=True)
     points = models.IntegerField()
+    use = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
         self.name = self.name.upper()
@@ -73,6 +74,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now)
     pseudo = models.CharField(max_length=250)
     avatar = models.ImageField(upload_to='static/images')
+    use = models.BooleanField(default=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
