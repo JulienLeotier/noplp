@@ -105,9 +105,25 @@ body {
     overflow: auto;
 }
 
+.chars .char .black {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    transition: transform 0.3s;
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+}
+
 .chars .char {
-    width: 120px;
-    height: 100px;
+    width: 220px;
+    height: 200px;
     flex-shrink: 0;
     margin: 2px;
     position: relative;
@@ -141,6 +157,11 @@ body {
     font-weight: 800;
     -webkit-text-stroke: 1px black;
     color: white;
+}
+
+.playerButton {
+    background: #004e9d;
+    background: linear-gradient(145deg, rgba(0, 78, 157, 1) 0%, rgba(255, 255, 255, 1) 70%, rgba(105, 228, 255, 1) 100%);
 }
 
 .select {

@@ -12,19 +12,20 @@
   <link rel="stylesheet"
     href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap" rel="stylesheet">
-
-
 </head>
 
 <body>
   <div class="app">
-
+    <h1 style="color: white; text-align: center;" id="selection">Sélectionner le Joueur 1</h1>
     <div class="chars">
       {% for char in characters %}
       <div class="char" name="{{char.name}}" image="/{{char.image}}"
         onclick="changeUser('{{char.name}}','/{{char.image}}', {{char.id}})">
-        <div class="char-img" style="background-image: url(/{{char.image}})"></div>
+        <div class="char-img" id="{{char.id}}" style="background-image: url(/{{char.image}})"></div>
         <p>{{ char.name }}</p>
+        <div>
+          <p id="button{{char.id}}" class='playerButton' style='opacity: 0'></p>
+        </div>
       </div>
       {% endfor %}
     </div>
@@ -38,7 +39,7 @@
             <div class="player-info-background"></div>
             <h1 id='nameUser'></h1>
             <h2>Player 1</h2>
-            <button class="controller" onclick="change()">
+            <button class="controller" id="validate1" onclick="change()">
               Valider
             </button>
           </div>
@@ -51,7 +52,7 @@
             <div class="player-info-background"></div>
             <h1 id='nameUser2'></h1>
             <h2>Player 2</h2>
-            <button class="controller" onclick='goToNext()'>
+            <button class="controller" id="validate2" style='opacity: 0;' onclick='goToNext()'>
               Valider
             </button>
           </div>

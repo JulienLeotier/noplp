@@ -166,21 +166,35 @@ function getUrlParameter(sParam) {
 
 function changeUser(name, image, id) {
     let data = localStorage.getItem('first');
-    console.log(id)
+    if ($(`#${id}`).hasClass('black')) {
+        return true
+    }
     if (data === 'true') {
+        if (localStorage.getItem('user1') == id) {
+            return true
+        }
+        document.getElementById(localStorage.getItem('user2')).classList.replace('black', 'char-img')
         localStorage.setItem('user2', id)
         document.getElementById('nameUser2').innerText = name
         document.getElementById('user2').style.backgroundImage = `url(${image})`
+        document.getElementById(id).classList.replace('char-img', 'black')
     }
     if (data === 'false') {
+        document.getElementById(localStorage.getItem('user1')).classList.replace('black', 'char-img')
         localStorage.setItem('user1', id)
         document.getElementById('nameUser').innerText = name
         document.getElementById('user1').style.backgroundImage = `url(${image})`
+        document.getElementById(id).classList.replace('char-img', 'black')
     }
 }
 
 function change() {
-    console.log('hello')
+    document.getElementById('selection').innerText = 'Sélectionner le joueur 2'
+    document.getElementById('validate1').style.opacity = 0;
+    document.getElementById('validate2').style.opacity = 1;
+    document.getElementById(`button${localStorage.getItem('user1')}`).innerText = 'Joueur 1'
+    document.getElementById(`button${localStorage.getItem('user1')}`).style.opacity = 1;
+
     localStorage.setItem('first', true);
 }
 
