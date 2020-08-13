@@ -168,12 +168,12 @@ function changeUser(name, image, id) {
     let data = localStorage.getItem('first');
     console.log(id)
     if (data === 'true') {
-        localStorage.setItem('user1', id)
+        localStorage.setItem('user2', id)
         document.getElementById('nameUser2').innerText = name
         document.getElementById('user2').style.backgroundImage = `url(${image})`
     }
     if (data === 'false') {
-        localStorage.setItem('user2', id)
+        localStorage.setItem('user1', id)
         document.getElementById('nameUser').innerText = name
         document.getElementById('user1').style.backgroundImage = `url(${image})`
     }
