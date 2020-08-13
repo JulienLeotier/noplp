@@ -8,7 +8,7 @@ import random
 
 
 def choice_player(request):
-    data = CustomUser.objects.all()
+    data = CustomUser.objects.filter(use=True)
     myData = []
     for user in data:
         if user.pseudo != 'ADMIN':
@@ -28,7 +28,7 @@ def choice_cat(request, nombre1, nombre2):
     for x in historique.categorie.all():
         name_exclude.append(x)
     categorie = Categorie.objects.exclude(
-        name__in=name_exclude).order_by('points').reverse()
+        name__in=name_exclude).order_by('points').reverse().filter(use=True)
     return render(request, 'blog/choice_categorie.html', {'historiques': historique, 'categories': categorie, 'user1': user1, 'user2': user2})
 
 
