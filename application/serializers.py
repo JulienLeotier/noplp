@@ -1,0 +1,15 @@
+"""
+    serializer.py
+"""
+
+from rest_framework import serializers
+from .models import CustomUser
+
+
+class CustomUserSerilizer(serializers.Serializer):
+    """
+        serializer for CustomUser
+    """
+    class Meta:
+        model = CustomUser
+        fields = '__all__'

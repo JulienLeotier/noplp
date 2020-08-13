@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{{ page.title }}</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="row">
+        <div class="col s4 center-align">
+            <div class="row">
+                <div class="col s12">
+                    <div class="card">
+                        <div class="card-image">
+                            <img style='height: 100%; width: 100%; object-fit: contain' src="/{{user1.avatar}}">
+                        </div>
+                        <div class="card-content">
+                            <p>{{user1.pseudo}}</p>
+                        </div>
+                        <div class="card-action">
+                            <p id='score1'>{{historiques.scoreUser}}</p>
+                            <div id='buttonJoueur1'>
+                                <a class="btn-floating btn-large waves-effect waves-light green"
+                                    onclick="add_score(0, localStorage.getItem('categorie'), localStorage.getItem('catId'), 'buttonJoueur1', 'buttonJoueur2')">
+                                    <i class="material-icons">check</i></a>
+                                <a class="btn-floating btn-large waves-effect waves-light red"
+                                    onclick="changePlayer('buttonJoueur1', 'buttonJoueur2')"><i
+                                        class="material-icons">clear</i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col s4 center-align">
+            <div class='row'>
+                {% for cat in categories %}
+                <div class='col s12'>
+                    <a class="waves-effect waves-light btn-large"
+                        style="width: 100%; margin-top: 10%; marign-bottom: 2%" id="{{cat.id}}"
+                        onclick="add_cat({{cat.points}}, {{cat.id}})">{{cat.name}} |
+                        {{cat.points}}</a>
+                </div>
+                {% endfor %} {% for catUse in historiques.categorie.all %}
+                <div class='col s12'>
+                    <a class="waves-effect waves-light btn-large disabled"
+                        style="width: 100%; margin-top: 10%; marign-bottom: 2%" id="{{cat.id}}" id="{{catUse.id}}">
+                        {{catUse.name}} | {{catUse.points}}</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col s4 center-align">
+            <div class="row">
+                <div class="col s12">
+                    <div class="card">
+                        <div class="card-image">
+                            <img style='height: 100%; width: 100%; object-fit: contain;' src="/{{user2.avatar}}">
+                        </div>
+                        <div class="card-content">
+                            <p>{{user2.pseudo}}</p>
+                        </div>
+                        <div class="card-action">
+                            <p id='score2'>{{historiques.scoreUser2}}</p>
+                            <div id='buttonJoueur2'>
+                                <a class="btn-floating btn-large waves-effect waves-light green"
+                                    onclick="add_score(0, localStorage.getItem('categorie'), localStorage.getItem('catId'), 'buttonJoueur2', 'buttonJoueur1')">
+                                    <i class="material-icons">check</i></a>
+                                <a class="btn-floating btn-large waves-effect waves-light red"
+                                    onclick="changePlayer('buttonJoueur2', 'buttonJoueur1')"><i
+                                        class="material-icons">clear</i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    {% block javascript %}
+    <script>
+        if (localStorage.getItem('currentPlayer')) {
+            if (localStorage.getItem('currentPlayer') == 'buttonJoueur1') {
+                document.getElementById('buttonJoueur2').style.opacity = 0;
+                document.getElementById('buttonJoueur1').style.opacity = 1;
+            } else {
+                document.getElementById('buttonJoueur1').style.opacity = 0;
+                document.getElementById('buttonJoueur2').style.opacity = 1;
+            }
+        }
+
+
+        function add_cat(points, id) {
+            localStorage.setItem('categorie', points);
+            localStorage.setItem('catId', id);
+            location.href = `/choice_music/${id}/`
+        }
+
+        function changePlayer(btn1, btn2) {
+            if (localStorage.getItem('catId')) {
+                $.ajax({
+                    type: 'POST',
+                    url: `/add_score/{{historiques.id}}/0/0/${localStorage.getItem('catId')}/`,
+                    success: function (response) {
+                        localStorage.setItem('currentPlayer', btn2);
+                        localStorage.removeItem('categorie')
+                        localStorage.removeItem('catId')
+                        localStorage.removeItem('idCatUse')
+                        location.reload()
+
+                    },
+                    error: function (response) {
+                        // alert the error if any error occured
+                        console.log(response)
+                    }
+                })
+            }
+        }
+
+        function add_score(score1, score2, id, btn1, btn2) {
+            if (score1 == null || score2 == null) {
+                return true
+            }
+            $.ajax({
+                type: 'POST',
+                url: `/add_score/{{historiques.id}}/${score1}/${score2}/${id}/`,
+                success: function (response) {
+                    localStorage.setItem('currentPlayer', btn2);
+                    localStorage.removeItem('categorie')
+                    localStorage.removeItem('catId')
+                    localStorage.removeItem('idCatUse')
+                    location.reload()
+
+                },
+                error: function (response) {
+                    // alert the error if any error occured
+                    console.log(response)
+                }
+            })
+        }
+    </script>
+    {% endblock javascript %}
+</body>
+
+</html>
