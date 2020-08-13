@@ -37,7 +37,7 @@
                             <p id='score1'>{{historiques.scoreUser}}</p>
                             <div id='buttonJoueur1'>
                                 <a class="btn-floating btn-large waves-effect waves-light green"
-                                    onclick="add_score(0, localStorage.getItem('categorie'), localStorage.getItem('catId'), 'buttonJoueur1', 'buttonJoueur2')">
+                                    onclick="add_score(localStorage.getItem('categorie'), 0, localStorage.getItem('catId'), 'buttonJoueur1', 'buttonJoueur2')">
                                     <i class="material-icons">check</i></a>
                                 <a class="btn-floating btn-large waves-effect waves-light red"
                                     onclick="changePlayer('buttonJoueur1', 'buttonJoueur2')"><i
