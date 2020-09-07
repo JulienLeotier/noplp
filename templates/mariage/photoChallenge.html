@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenge Photos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+    <link rel="stylesheet" href="/static/assets/css/style-mariage.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="navbar-fixed">
+        <nav class="nav-extended navBackground">
+            <div class="nav-wrapper">
+                <a href="/" class="brand-logo center textColor">MÉLI ET JU</a>
+            </div>
+        </nav>
+    </div>
+    <div class="row afterNav">
+        <h1 class="textColor textcenter">{{name}}</h1>
+        <p onclick="changeGroup()" class="textcenter textColor pointer">
+            Changer de groupe
+        </p>
+        {% for challenge in challengeDone %}
+        <div class="col s12 m4">
+            <div class="card backgroundColor">
+                <div class="card-image">
+                    <div class="image-upload">
+                        <label for="file-input">
+                            <img src="/{{challenge.photos}}" />
+                            <div class="bottom-right backgroundColor">Reprendre la photo</div>
+                        </label>
+                        <form id="formExist" action="/challenge/{{challenge.id}}/" method="POST"
+                            enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input id="file-input" type="file" name="image" accept="image/*;capture=camera"
+                                onchange="handleFilesExist({{challenge.challenge.id}}, {{challenge.group}})" />
+                        </form>
+                    </div>
+                </div>
+                <div class="card-content  metal linearText">
+                    <h5>{{challenge.challenge.name}}</h5>
+                    <p>{{challenge.challenge.description}}</p>
+                </div>
+                <div class="card-action  metal linearText">
+                    <a download="challenge-{{challenge.challenge.name}}.jpg" href="/{{challenge.photos}}"
+                        title="{{challenge.challenge.name}}">Télécharger la photos</a>
+                    <a onclick="deleted({{challenge.id}})" title="{{challenge.challenge.name}}">Suprimer</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% for challenge in challengeToDo %}
+        <div class="col s12 m4">
+            <div class="card backgroundColor">
+                <div class="card-action  metal linearText">
+                    <a href="#">{{challenge.challenge.name}}</a>
+                    <p>{{challenge.challenge.description}}</p>
+                </div>
+                <div class="card-action  metal linearText">
+                    <form id="formToDo" action="/challenge/{{challenge.challenge.id}}/{{challenge.group}}/"
+                        method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <a><label for="file" class="label-file">Prendre la
+                                photos</label></a>
+                        <input id="file" class="input-file" type="file" name="image"
+                            onchange="handleFiles({{challenge.challenge.id}}, {{challenge.group}})"
+                            accept="image/*;capture=camera">
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="navbar-fixed bottomMenu">
+        <nav class="nav-extended bottomMenu navBackground">
+            <div class="nav-content">
+                <ul class="tabs tabs-transparent tabsOver">
+                    <li class="tab tabOver">
+                        <a href="/" class="textColor">
+                            <i class="material-icons">book</i>
+                        </a>
+                    </li>
+                    <li class="tab tabOver">
+                        <a class="active textColor" href="/photos">
+                            <i class="material-icons">camera_alt</i>
+                        </a>
+                    </li>
+                    <li class="tab tabOver">
+                        <a href="/view" class="textColor">
+                            <i class="material-icons">favorite</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        const handleFiles = (challengeId, groupId) => {
+            document.getElementById("formToDo").submit();
+        }
+        const handleFilesExist = (challengeId, groupId) => {
+            document.getElementById("formExist").submit();
+        }
+        const deleted = (id) => {
+            console.log(id)
+            var myHeaders = new Headers();
+
+            var myInit = {
+                method: 'GET',
+                headers: myHeaders,
+                mode: 'cors',
+                cache: 'default'
+            };
+
+            fetch(`/challengeDelete/${id}/`, myInit)
+                .then(function (response) {
+                    console.log(response)
+                    let name = "{{name}}"
+                    window.location.href = `/challenge/${name}`
+                })
+        }
+        const changeGroup = () => {
+            localStorage.removeItem('group')
+            window.location.href = `/challenge`
+        }
+    </script>
+</body>
+
+</html>

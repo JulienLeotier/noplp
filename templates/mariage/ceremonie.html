@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>Cérémonie</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+    <link rel="stylesheet" href="/static/assets/css/style-mariage.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="navbar-fixed">
+        <nav class="nav-extended navBackground">
+            <div class="nav-wrapper">
+                <a href="/" class="brand-logo center textColor">MÉLI ET JU</a>
+            </div>
+        </nav>
+    </div>
+    <div class="row afterNav">
+        <div class="col s12">
+            <div class="card backgroundColor videoCard">
+                <div class="card-image" id="vid-box">
+                    <video id="video-preview" controls loop></video>
+                </div>
+                <div class="card-action  metal linearText">
+                    <a href="#">Cérémonie en direct</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="navbar-fixed bottomMenu">
+        <nav class="nav-extended bottomMenu navBackground">
+            <div class="nav-content">
+                <ul class="tabs tabs-transparent tabsOver">
+                    <li class="tab tabOver">
+                        <a href="/" class="textColor">
+                            <i class="material-icons">book</i>
+                        </a>
+                    </li>
+                    <li class="tab tabOver">
+                        <a class="active textColor" href="/photos">
+                            <i class="material-icons">camera_alt</i>
+                        </a>
+                    </li>
+                    <li class="tab tabOver">
+                        <a href="/view" class="textColor">
+                            <i class="material-icons">favorite</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://rtcmulticonnection.herokuapp.com/dist/RTCMultiConnection.min.js"></script>
+    <script src="https://rtcmulticonnection.herokuapp.com/node_modules/webrtc-adapter/out/adapter.js"></script>
+    <script src="https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js"></script>
+    <!-- <script src="https://www.webrtc-experiment.com/RecordRTC.js"></script> -->
+    <script src="/static/assets/js/stream.js"></script>
+    <script src="https://www.webrtc-experiment.com/common.js"></script>
+    <script>
+        joinOrCreateBroadcast()
+    </script>
+</body>
+
+</html>

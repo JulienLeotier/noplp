@@ -87,3 +87,37 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
+class Challenge(models.Model):
+    name = models.CharField(max_length=250)
+    description = models.CharField(max_length=250)
+
+    def __str__(self):
+        return self.name
+
+
+class Group(models.Model):
+    name = models.CharField(max_length=250, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class ChallengeGroups(models.Model):
+    challenge = models.ForeignKey(Challenge, verbose_name=_(
+        "challenge"), on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, verbose_name=_(
+        "group"), on_delete=models.CASCADE)
+    photos = models.ImageField(upload_to='static/images')
+    like = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.group.name + ' ' + self.challenge.name
+
+
+class Photobooth(models.Model):
+    photos = models.ImageField(upload_to='static/images')
+
+    def __str__(self):
+        return 'super photo'

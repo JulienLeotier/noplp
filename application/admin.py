@@ -16,7 +16,7 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
-    list_display = ('email', 'is_staff', 'is_active', 'pseudo','use',)
+    list_display = ('email', 'is_staff', 'is_active', 'pseudo', 'use',)
     list_filter = ('email', 'is_staff', 'is_active', 'pseudo', 'use',)
     fieldsets = (
         (None, {'fields': ('email', 'password',
@@ -51,3 +51,7 @@ admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Categorie)
 admin.site.register(Historique)
 admin.site.register(Musique, MusiqueAdmin)
+admin.site.register(Group)
+admin.site.register(Challenge)
+admin.site.register(ChallengeGroups)
+admin.site.register(Photobooth)

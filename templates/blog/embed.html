@@ -1,0 +1,68 @@
+    <link rel="stylesheet" href="/static/assets/css/style-mariage.css" />
+
+    <div id="vid-box"></div>
+    <div id="stream-info"><span id="here-now">0</span></div>
+
+    <script src="https://cdn.pubnub.com/pubnub.min.js"></script>
+    <script src="http://kevingleason.me/SimpleRTC/js/webrtc.js"></script>
+    <script src="http://kevingleason.me/SimpleRTC/js/rtc-controller.js"></script>
+
+    <script>
+        (function () {
+            var urlargs = urlparams();
+            var video_out = document.getElementById("vid-box");
+            var stream_info = document.getElementById("stream-info");
+            var here_now = document.getElementById("here-now");
+            // Handle error if stream is not in urlargs.
+            if (!('stream' in urlargs)) {
+                handleNoStream();
+                return;
+            }
+            // Get URL params
+            function urlparams() {
+                var params = {};
+                if (location.href.indexOf('?') < 0) return params;
+                PUBNUB.each(
+                    location.href.split('?')[1].split('&'),
+                    function (data) {
+                        var d = data.split('=');
+                        params[d[0]] = 'mariage';
+                    }
+                );
+                return params;
+            }
+
+            function handleNoStream() {
+                video_out.innerHTML = "<h2>That stream no longer exists!</h2>";
+                stream_info.hidden = true;
+            }
+            var phone = window.phone = PHONE({
+                number: "EmbedViewer" + Math.floor(Math.random() * 100), // random viewer name
+                publish_key: 'pub-c-8e576592-6036-45a1-b880-e29f27f0e33f', // Your Pub Key
+                subscribe_key: 'sub-c-2cd718fe-ef59-11ea-8da6-961d8ae7f76b', // Your Sub Key
+                oneway: true,
+            });
+            var ctrl = window.ctrl = CONTROLLER(phone);
+            ctrl.ready(function () {
+                ctrl.isStreaming(stream, function (isOn) {
+                    if (isOn) ctrl.joinStream(stream);
+                    else handleNoStream();
+                });
+            });
+            ctrl.receive(function (session) {
+                session.connected(function (session) {
+                    stream_info.hidden = false;
+                    video_out.appendChild(session.video);
+                });
+                session.ended(function (session) {
+                    handleNoStream();
+                });
+            });
+            ctrl.streamPresence(function (m) {
+                here_now.innerHTML = m.occupancy;
+            });
+            ctrl.unable(function () {
+                handleNoStream();
+            });
+        });
+    </script>

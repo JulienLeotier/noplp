@@ -8,4 +8,4 @@ services:
       - "8000:8000"
     volumes:
       - ./:/code
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runsslserver --certificate melietju_fr.crt --key private.key  0.0.0.0:8000

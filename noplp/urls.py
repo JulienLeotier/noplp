@@ -21,12 +21,30 @@ from application import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.choice_player),
+    path('', views.start),
+    path('challenge', views.challenge),
+    path('photobooth', views.photobooth),
+    path('savePhotobooth', views.savePhotoBooth),
+    path('getPhotobooth', views.getPhotobooth),
+    path('getAllChallenge', views.getAllChallenge),
+    path('getMyChallenge/<int:id>', views.getMyChallenge),
+    path('challenge/<str:name>', views.getChallenge),
+    path('challenge/<int:challengeId>/<int:groupId>/', views.postChallenge),
+    path('challenge/<int:id>/',
+         views.postChallengeDone),
+    path('challengeDelete/<int:id>/',
+         views.deleteChallengeDone),
+    path('view', views.view),
+    path('photos', views.hubPhoto),
+    path('stream', views.stream),
+    path('embed.html', views.embed),
+    path('players', views.choice_player),
     path('choice_music/<int:catId>/', views.choice_music),
     path('use_music/<int:musicId>/', views.use_music),
     path('choice_cat/<int:nombre1>/<int:nombre2>/', views.choice_cat),
     path('player/<int:id>/', views.player),
     path('add_score/<int:id>/<int:nombre1>/<int:nombre2>/<int:catId>/',
          views.add_score, name='add_score'),
+
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
