@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Challenge Photos</title>
+    <title>PhotoBooth</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
     <link rel="stylesheet" href="/static/assets/css/style-mariage.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -22,9 +22,16 @@
         </nav>
     </div>
     <div class="row afterNav">
-        <p onclick="changeGroup()" class="textcenter textColor pointer">
-            retour
-        </p>
+        <div class="col s6">
+            <p onclick="changeGroup()" class="textcenter textColor pointer">
+                retour
+            </p>
+        </div>
+        <div class="col s6">
+            <p onclick="window.location.href = `/getPhotobooth`" class="textcenter textColor pointer">
+                Voir les photos
+            </p>
+        </div>
         <div class="col s12">
             <form id="formToDo" action="/savePhotobooth" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -35,11 +42,27 @@
                 <div class="card-image" id="vid-box">
                     <video id="video-preview"></video>
                     <img id="canvas" class="textcenter" src='/' style="display:none;" />
-                    <div class="bottom-right metal linearText">Mélissa et Julien </br> 26/09/20</div>
+                    <div class="bottom-right metal linearText" style="font-size:16px;">Mélissa et Julien </br> 26/09/20
+                    </div>
+                    <div class="centered" id="counterDown" style="display: none;">
+                        <center>
+                            <div class="count-down">
+                                <span class="metal linearText">10</span>
+                            </div>
+                        </center>
+                    </div>
+                    <div class="bottom-left">
+                        <div href="#" class="textColor pointer" onclick="compteur()">
+                            <i class="material-icons" id="compteur">timer_off</i>
+                        </div>
+                    </div>
+
                     <canvas id="c" style="display:none;"></canvas>
+
                 </div>
-                <div class="card-action  metal linearText">
-                    <a href="#" class="pointer" id="b">Prendre une photos</a>
+                <div class="card-action  metal linearText" style="padding: 0">
+                    <p href="#" class="pointer textcenter" style="margin: 0" id="b">Prendre une photos</p>
+
                 </div>
             </div>
         </div>
@@ -97,35 +120,74 @@
         const changeGroup = () => {
             window.location.href = `/photos`
         }
+
+        const compteur = () => {
+            if (document.getElementById('compteur').innerText == 'timer') {
+                document.getElementById('compteur').innerText = 'timer_off'
+            } else {
+                document.getElementById('compteur').innerText = 'timer'
+            }
+        }
     </script>
     <script>
         navigator.getUserMedia({
-            video: true
-        }, function (stream) {
-            var video = document.getElementById("video-preview");
-            var canvas = document.getElementById("c");
-            var button = document.getElementById("b");
+                video: true
+            }, function (stream) {
+                var video = document.getElementById("video-preview");
+                var canvas = document.getElementById("c");
+                var button = document.getElementById("b");
 
-            video.srcObject = stream;
-            video.play()
-            button.disabled = false;
-            button.onclick = function () {
-                var context;
-                var width = video.offsetWidth,
-                    height = video.offsetHeight;
-                canvas.width = width;
-                canvas.height = height;
+                video.srcObject = stream;
+                video.play()
+                button.disabled = false;
+                button.onclick = function () {
+                    if (localStorage.getItem('photo')) {
+                        return
+                    }
+                    if (document.getElementById('compteur').innerText == 'timer') {
+                        var counterDown = setInterval(function () {
+                            localStorage.setItem('photo', true)
+                            document.getElementById('counterDown').style.display = 'block';
+                            var span = $("span").html();
+                            var counter = parseInt(span);
+                            if (counter !== 0) {
+                                $("span").html(counter - 1);
+                            } else {
+                                clearInterval(counterDown);
+                                var context;
+                                var width = video.offsetWidth,
+                                    height = video.offsetHeight;
+                                canvas.width = width;
+                                canvas.height = height;
+                                localStorage.removeItem('photo')
+                                context = canvas.getContext('2d');
+                                context.drawImage(video, 0, 0, width, height);
 
-                context = canvas.getContext('2d');
-                context.drawImage(video, 0, 0, width, height);
+                                img = canvas.toDataURL('image/png');
+                                $('#image').val(img);
+                                document.getElementById("formToDo").submit();
+                            }
+                        }, 1000);
+                    } else {
+                        var context;
+                        var width = video.offsetWidth,
+                            height = video.offsetHeight;
+                        canvas.width = width;
+                        canvas.height = height;
 
-                img = canvas.toDataURL('image/png');
-                $('#image').val(img);
-                document.getElementById("formToDo").submit();
-            };
-        }, function (err) {
-            alert("there was an error " + err)
-        });
+                        context = canvas.getContext('2d');
+                        context.drawImage(video, 0, 0, width, height);
+
+                        img = canvas.toDataURL('image/png');
+                        $('#image').val(img);
+                        document.getElementById("formToDo").submit();
+                    }
+
+                };
+            },
+            function (err) {
+                alert("there was an error " + err)
+            });
     </script>
 </body>
 

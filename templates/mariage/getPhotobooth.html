@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Challenge Photos</title>
+    <title>Voir les photobooth</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
     <link rel="stylesheet" href="/static/assets/css/style-mariage.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -24,6 +24,9 @@
     <div class="row afterNav">
         <p onclick="changeGroup()" class="textcenter textColor pointer">
             Retour
+        </p>
+        <p onclick="viewPicture()" class="textcenter textColor pointer">
+            prendre des photos
         </p>
         {% for challenge in photobooth %}
         <div class="col s12 m4">
@@ -97,6 +100,9 @@
         }
         const changeGroup = () => {
             window.location.href = `/photos`
+        }
+        const viewPicture = () => {
+            window.location.href = '/photobooth'
         }
     </script>
 </body>

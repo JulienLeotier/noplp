@@ -74,8 +74,10 @@
        socket.on('broadcast-stopped', function(broadcastId) {
            // alert('Broadcast has been stopped.');
            // location.reload();
-           console.error('broadcast-stopped', broadcastId);
-           alert('This broadcast has been stopped.');
+           console.log('broadcast-stopped', broadcastId);
+           state = document.getElementById('state')
+
+           state.innerText = 'La cérémonie est fini';
        });
 
        // this event is emitted when a broadcast is absent.
@@ -177,10 +179,6 @@
    // if broadcast is absent, simply create it. i.e. "start-broadcasting" event should be fired.
    function joinOrCreateBroadcast() {
        var broadcastId = 'mariage';
-       if (broadcastId.replace(/^\s+|\s+$/g, '').length <= 0) {
-           alert('Please enter broadcast-id');
-           return;
-       }
        connection.extra.broadcastId = broadcastId;
 
        connection.session = {
@@ -191,12 +189,31 @@
 
        connection.getSocket(function(socket) {
            socket.emit('check-broadcast-presence', broadcastId, function(isBroadcastExists) {
+               state = document.getElementById('state')
                if (!isBroadcastExists) {
                    // the first person (i.e. real-broadcaster) MUST set his user-id
-                   connection.userid = broadcastId;
-               }
+                   if (localStorage.getItem('admin')) {
+                       connection.userid = broadcastId;
+                   } else {
+                       if (new Date() >= new Date('Sat Sep 26 2020 15:30:00 GMT+0200 (heure d’été d’Europe centrale)')) {
+                           state.innerText = 'La cérémonie va bientôt commencer'
+                           localStorage.setItem('join', true)
+                           joinOrCreateBroadcast()
+                       } else if (new Date() >= new Date('Sat Sep 26 2020 17:30:00 GMT+0200 (heure d’été d’Europe centrale)')) {
+                           state.innerText = 'La cérémonie est terminer'
+                       } else {
+                           state.innerText = 'La céremonie en direct le 26/09/20 à partir de 15h30'
+                       }
 
+                       return
+                   }
+               }
+               if (!localStorage.getItem('admin') && localStorage.getItem('join')) {
+                   localStorage.removeItem('join')
+                   window.location.reload()
+               }
                console.log('check-broadcast-presence', broadcastId, isBroadcastExists);
+               state.innerText = 'Cérémonie en direct'
 
                socket.emit('join-broadcast', {
                    broadcastId: broadcastId,

@@ -241,3 +241,7 @@ def savePhotoBooth(request):
     photobooth, created = Photobooth.objects.get_or_create(photos=data)
     photobooth.photos.save(file_name, data, save=True)
     return redirect('/photobooth')
+
+
+def isAdmin(request):
+    return render(request, 'mariage/isAdmin.html')
