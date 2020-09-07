@@ -1,4 +1,4 @@
-#!/home/julien/NOPLP/noplp/env/bin/python3
+#!/root/noplp/env/bin/python3
 # When the django-admin.py deprecation ends, remove this script.
 import warnings
 
