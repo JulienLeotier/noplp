@@ -77,7 +77,7 @@
            console.log('broadcast-stopped', broadcastId);
            state = document.getElementById('state')
 
-           state.innerText = 'La cérémonie est fini';
+           state.innerText = 'La cérémonie est finie';
        });
 
        // this event is emitted when a broadcast is absent.

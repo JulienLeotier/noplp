@@ -4,7 +4,7 @@ if (localStorage.getItem('group')) {
 
 
 function validateTeam() {
-    let name = document.getElementById('name').value
+    let name = document.getElementById('name').value.toUpperCase()
     if (name) {
         document.getElementById('err').style.display = 'none'
         localStorage.setItem('group', name)
