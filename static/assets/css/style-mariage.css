@@ -179,6 +179,42 @@ body {
     }
 }
 
+@media only screen and (min-width: 768px) {
+    .destopView {
+        margin-top: 10%;
+    }
+    .videoCard {
+        height: 540px;
+    }
+}
+
+@media only screen and (min-width: 1440px) {
+    .destopView {
+        margin-top: 10%;
+    }
+    .videoCard {
+        height: 720px;
+    }
+}
+
+@media only screen and (min-width: 1450px) {
+    .destopView {
+        margin-top: 10%;
+    }
+    .videoCard {
+        height: 1480px;
+    }
+}
+
+@media only screen and (min-width: 2000px) {
+    .destopView {
+        margin-top: 10%;
+    }
+    .videoCard {
+        height: 1480px;
+    }
+}
+
 .centered {
     position: absolute;
     top: 50%;
