@@ -165,7 +165,7 @@ body {
     text-align: center;
 }
 
-.videoCard {
+.videoCardy {
     margin-top: 20vh;
     /* poussé de la moitié de hauteur de viewport */
     transform: translateY(-50%);
