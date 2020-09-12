@@ -39,6 +39,7 @@
                 <input type="hidden" for="image" id="image" name="image" />
 
             </form>
+
             <div class="card backgroundColor videoCardy">
                 <div class="card-image" id="vid-box">
                     <video id="video-preview"></video>
@@ -56,6 +57,9 @@
                         <div href="#" class="textColor pointer" onclick="compteur()">
                             <i class="material-icons" id="compteur">timer_off</i>
                         </div>
+                        <div class="textColor pointer" href="#" id="loop" onclick="camera()">
+                            <i class="material-icons">loop</i>
+                        </div>
                     </div>
 
                     <canvas id="c" style="display:none;"></canvas>
@@ -63,7 +67,6 @@
                 </div>
                 <div class="card-action  metal linearText" style="padding: 0">
                     <p href="#" class="pointer textcenter" style="margin: 0" id="b">Prendre une photos</p>
-
                 </div>
             </div>
         </div>
@@ -131,9 +134,112 @@
         }
     </script>
     <script>
+        const cameraOptions = document.querySelector('#loop');
+        let currentStream;
+        let currentCamera;
+
+        function stopMediaTracks(stream) {
+            stream.getTracks().forEach(track => {
+                track.stop();
+            });
+        }
+        cameraOptions.onclick = () => {
+            if (typeof currentStream !== 'undefined') {
+                stopMediaTracks(currentStream);
+            }
+            const updatedConstraints = {
+                deviceId: {
+                    exact: cameraOptions.value
+                }
+            };
+            const videoConstraints = {};
+            if (currentCamera === undefined) {
+                videoConstraints.facingMode = {
+                    exact: 'environment'
+                };
+                currentCamera = ''
+
+            } else {
+                videoConstraints.facingMode = {
+                    exact: 'user'
+                };
+                currentCamera = undefined
+
+
+            }
+            const constraints = {
+                video: videoConstraints,
+                audio: false
+            };
+            navigator.getUserMedia(
+                constraints,
+                function (stream) {
+                    currentStream = stream
+                    var video = document.getElementById("video-preview");
+                    var canvas = document.getElementById("c");
+                    var button = document.getElementById("b");
+
+                    video.srcObject = stream;
+                    video.play()
+                    button.disabled = false;
+                    button.onclick = function () {
+                        if (localStorage.getItem('photo')) {
+                            return
+                        }
+                        if (document.getElementById('compteur').innerText == 'timer') {
+                            var counterDown = setInterval(function () {
+                                localStorage.setItem('photo', true)
+                                document.getElementById('counterDown').style.display = 'block';
+                                var span = $("span").html();
+                                var counter = parseInt(span);
+                                if (counter !== 0) {
+                                    $("span").html(counter - 1);
+                                } else {
+                                    clearInterval(counterDown);
+                                    var context;
+                                    var width = video.offsetWidth,
+                                        height = video.offsetHeight;
+                                    canvas.width = width;
+                                    canvas.height = height;
+                                    localStorage.removeItem('photo')
+                                    context = canvas.getContext('2d');
+                                    context.drawImage(video, 0, 0, width, height);
+
+                                    img = canvas.toDataURL('image/png');
+                                    $('#image').val(img);
+                                    document.getElementById("formToDo").submit();
+                                }
+                            }, 1000);
+                        } else {
+                            var context;
+                            var width = video.offsetWidth,
+                                height = video.offsetHeight;
+                            canvas.width = width;
+                            canvas.height = height;
+
+                            context = canvas.getContext('2d');
+                            context.drawImage(video, 0, 0, width, height);
+
+                            img = canvas.toDataURL('image/png');
+                            $('#image').val(img);
+                            document.getElementById("formToDo").submit();
+                        }
+
+                    };
+                },
+                function (err) {
+                    alert("there was an error " + err)
+                });
+        };
+        const getCameraSelection = async () => {
+            cameraOptions.style.display = 'block'
+        };
+
+        getCameraSelection();
         navigator.getUserMedia({
                 video: true
             }, function (stream) {
+                currentStream = stream;
                 var video = document.getElementById("video-preview");
                 var canvas = document.getElementById("c");
                 var button = document.getElementById("b");
