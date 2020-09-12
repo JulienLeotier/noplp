@@ -10,7 +10,7 @@
 
 .navBackground {
     background: #28292D !important;
-    font-family: 'Monoton', cursive;
+    font-family: 'Monoton', serif;
 }
 
 .tabsOver {
@@ -103,7 +103,7 @@
 }
 
 body {
-    font-family: cursive;
+    font-family: serif;
     background: #28292D !important;
     /* background: white !important; */
 }
