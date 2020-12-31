@@ -245,3 +245,11 @@ def savePhotoBooth(request):
 
 def isAdmin(request):
     return render(request, 'mariage/isAdmin.html')
+
+def add_youtube(request):
+    musiques = Musique.objects.all()
+    for musique in musiques:
+        musique.url = musique.url.replace('https://wwww.youtube.com/embed/', 'https://www.youtube.com/embed/')
+        print(musique.url)
+        musique.save()
+    return HttpResponse(content='youtube change', content_type='application/json')

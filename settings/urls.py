@@ -46,6 +46,7 @@ urlpatterns = [
     path('player/<int:id>/', views.player),
     path('add_score/<int:id>/<int:nombre1>/<int:nombre2>/<int:catId>/',
          views.add_score, name='add_score'),
+    path('youtube', views.add_youtube)
 
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
