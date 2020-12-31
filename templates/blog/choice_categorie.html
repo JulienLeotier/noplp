@@ -2441,7 +2441,14 @@
         function add_cat(points, id) {
             localStorage.setItem('categorie', points);
             localStorage.setItem('catId', id);
-            location.href = `/choice_music/${id}/`
+            if(id === 13){
+                window.open(
+                'https://julienleotier.github.io/playlist/#/',
+                '_blank' // <- This is what makes it open in a new window.
+                );
+            } else {
+                location.href = `/choice_music/${id}/`
+            }
         }
 
         function changePlayer(btn1, btn2) {
